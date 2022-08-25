@@ -34,10 +34,41 @@ RCT_EXPORT_MODULE(SplashScreen)
 
 + (void)showSplash:(NSString*)splashScreen inRootView:(UIView*)rootView {
     if (!loadingView) {
-        loadingView = [[[NSBundle mainBundle] loadNibNamed:splashScreen owner:self options:nil] objectAtIndex:0];
+        UIViewController *vc = [[UIStoryboard storyboardWithName:@"LaunchScreen" bundle:nil] instantiateViewControllerWithIdentifier:@"SplashViewController"];
+        // [[[NSBundle mainBundle] loadNibNamed:splashScreen owner:self options:nil] objectAtIndex:0];
         CGRect frame = rootView.frame;
         frame.origin = CGPointMake(0, 0);
-        loadingView.frame = frame;
+        // loadingView.frame = frame;
+
+        /**
+         * Dynamic Splash code starts he;re
+         */
+        UIView *mainContainer = [[UIView alloc] initWithFrame:frame];
+        UIImageView *ivSplash =[[UIImageView alloc] initWithFrame:frame];
+        
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        NSInteger lastDisplayedIdx = [prefs integerForKey:@"lastDisplayedIdx"];
+        [prefs setInteger:(lastDisplayedIdx+1)%28 forKey:@"lastDisplayedIdx"];
+        [prefs synchronize];
+        
+        NSString* imgName = @"SplashScreen";
+        
+        if (lastDisplayedIdx != 0) {
+            imgName = [NSString stringWithFormat:@"SplashScreen%ld", (long)lastDisplayedIdx];
+        }
+        
+        UIImage *splashImage = [UIImage imageNamed: imgName];
+        
+        ivSplash.image=splashImage;
+        
+        [mainContainer addSubview:ivSplash];
+        
+        loadingView = vc.view;
+        
+        [loadingView addSubview:mainContainer];
+        /**
+         * Dynamic Splash code starts here
+         */
     }
     waiting = false;
     
