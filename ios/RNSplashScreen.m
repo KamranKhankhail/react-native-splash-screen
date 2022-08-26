@@ -32,9 +32,9 @@ RCT_EXPORT_MODULE(SplashScreen)
     }
 }
 
-+ (void)showSplash:(NSString*)splashScreen inRootView:(UIView*)rootView {
++ (void)showSplash:(NSString*)splashScreen inRootView:(UIView*)rootView numberOfSplash:(NSInteger)numberOfSplash {
     if (!loadingView) {
-        UIViewController *vc = [[UIStoryboard storyboardWithName:@"LaunchScreen" bundle:nil] instantiateViewControllerWithIdentifier:@"SplashViewController"];
+        UIViewController *vc = [[UIStoryboard storyboardWithName:@"SplashScreen" bundle:nil] instantiateViewControllerWithIdentifier:@"SplashViewController"];
         // [[[NSBundle mainBundle] loadNibNamed:splashScreen owner:self options:nil] objectAtIndex:0];
         CGRect frame = rootView.frame;
         frame.origin = CGPointMake(0, 0);
@@ -48,7 +48,7 @@ RCT_EXPORT_MODULE(SplashScreen)
         
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         NSInteger lastDisplayedIdx = [prefs integerForKey:@"lastDisplayedIdx"];
-        [prefs setInteger:(lastDisplayedIdx+1)%28 forKey:@"lastDisplayedIdx"];
+        [prefs setInteger:(lastDisplayedIdx+1)%numberOfSplash forKey:@"lastDisplayedIdx"];
         [prefs synchronize];
         
         NSString* imgName = @"SplashScreen";
